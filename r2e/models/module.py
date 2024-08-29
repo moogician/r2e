@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from enum import Enum
 from pydantic import BaseModel
 
@@ -17,21 +17,17 @@ class Module(BaseModel):
     repo: Repo
 
     # TODO: maybe don't use . representation for modules/ids
+    
+    def is_pkg(self) -> bool:
+        return self.module_type == ModuleTypeEnum.PACKAGE
 
     @property
-    def local_path(self) -> str:
-        path = self.module_id.identifier.replace(".", "/")
-        if self.module_type == ModuleTypeEnum.PACKAGE:
-            return f"{self.repo.repo_path}/{path}"
-        else:
-            return f"{self.repo.repo_path}/{path}.py"
+    def local_path(self) -> Path:
+        return self.repo.repo_path / self.relative_module_path
 
     @property
-    def relative_module_path(self) -> str:
-        if self.module_type == ModuleTypeEnum.PACKAGE:
-            return self.module_id.identifier.replace(".", "/")
-        else:
-            return f"{self.module_id.identifier.replace('.', '/')}.py"
+    def relative_module_path(self) -> Path:
+        return Path(self.module_id.identifier.replace(".", "/") + '' if self.is_pkg else '.py')
 
     @property
     def _repo_name(self) -> str:
@@ -44,14 +40,14 @@ class Module(BaseModel):
     # helper functions
 
     def exists(self) -> bool:
-        return os.path.exists(self.local_path)
+        return self.local_path.exists()
 
     @classmethod
-    def from_file_path(cls, file_path: str, repo: Repo | None) -> "Module":
+    def from_file_path(cls, file_path: str | Path, repo: Repo | None) -> "Module":
         if repo is None:
             repo = Repo.from_file_path(file_path)
         module_id = Identifier(
-            identifier=file_path.replace(repo.repo_path, "")[1:]
+            identifier=str(Path(file_path).relative_to(repo.repo_path))
             .replace(".py", "")
             .replace("/", ".")
         )

@@ -1,5 +1,5 @@
 from typing import Any, Optional
-
+from pathlib import Path
 from pydantic import BaseModel
 
 from r2e.models import Function, Method
@@ -54,7 +54,7 @@ class FunctionUnderTest(BaseUnderTest, Function):
         return cls.from_function_and_history(function)
 
     @property
-    def execution_fut_data(self) -> tuple[str, str]:
+    def execution_fut_data(self) -> tuple[str, Path]:
         return f"{self.name}", self.file.relative_file_path
 
 
@@ -74,7 +74,7 @@ class MethodUnderTest(BaseUnderTest, Method):
         return cls.from_method_and_history(method)
 
     @property
-    def execution_fut_data(self) -> tuple[str, str]:
+    def execution_fut_data(self) -> tuple[str, Path]:
         return (
             f"{self.parent_class.class_name}.{self.name}",
             self.file.relative_file_path,

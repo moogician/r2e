@@ -1,5 +1,6 @@
 import ast
 from typing import Optional
+from pathlib import Path
 
 from pydantic import BaseModel, validator
 
@@ -22,7 +23,7 @@ class Method(BaseModel):
     context: Optional[Context] = None
 
     @property
-    def file_path(self) -> str:
+    def file_path(self) -> Path:
         return self.file.file_path
 
     @property

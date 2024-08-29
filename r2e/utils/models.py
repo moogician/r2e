@@ -1,6 +1,7 @@
 import os
 import ast
 from typing import Any
+from pathlib import Path
 import typing_extensions
 
 from r2e.models.identifier import Identifier
@@ -42,24 +43,6 @@ def get_module_from_identifier(identifier: Identifier, repo: Repo) -> Module:
         return meth_module
     else:
         raise ValueError(f"Could not find module for: {identifier}")
-
-
-def get_module_from_path(local_path: str, repo: Repo) -> Module:
-    """
-    Gets the module from a local path in a repo.
-
-    Args:
-        local_path (str): local path of the module
-        repo (Repo): repository of interest
-
-    Returns:
-        Module: module of the code element
-    """
-    relative_path = local_path.split(f"{repo.local_repo_path}/")[1]
-    module_id = Identifier.from_relative_path(relative_path)
-    module = Module(module_id=module_id, repo=repo)
-    return module
-
 
 def get_type_from_identifier(identifier: Identifier, repo: Repo) -> CodeElemType:
     """Get the type of a code element given its identifier.

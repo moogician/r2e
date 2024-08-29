@@ -14,11 +14,10 @@ def extract_repo_data(repo: Repo) -> tuple[list[Function], list[Method]]:
     methods: list[Method] = []
 
     for file_path in repo.list_repo_files():
-        if not file_path.endswith(".py"):
+        if not file_path.name.endswith(".py"):
             continue
         ## hidden file or hidden directory ignore
-        file_path_split = file_path.split("/")
-        if any([part.startswith(".") for part in file_path_split]):
+        if any([part.startswith(".") for part in str(file_path).split('/')]):
             continue
         try:
             astree = build_ast_file(file_path)

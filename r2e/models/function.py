@@ -1,7 +1,7 @@
 import ast
-from typing import Optional, Any
-import typing_extensions
-from pydantic import BaseModel, BaseConfig, Field, validator
+from typing import Optional
+from pathlib import Path
+from pydantic import BaseModel, validator
 
 from r2e.models.repo import Repo
 from r2e.models.file import File
@@ -21,7 +21,7 @@ class Function(BaseModel):
     context: Optional[Context] = None
 
     @property
-    def file_path(self) -> str:
+    def file_path(self) -> Path:
         return self.file.file_path
 
     @property
@@ -107,8 +107,7 @@ class Function(BaseModel):
     def from_name_file_repo(
         cls, function_name: str, local_file_path: str, repo: Repo
     ) -> "Function":
-        pass
-        module: Module = get_module_from_path(local_file_path, repo)
+        module= Module.from_file_path(local_file_path, repo)
         module_identifier = module.module_id.identifier
         function_id = Identifier(identifier=module_identifier + "." + function_name)
         return cls(

@@ -1,6 +1,6 @@
-import ast
 from pydantic import BaseModel, validator
 from typing import Optional
+from pathlib import Path
 
 from r2e.models.file import File
 from r2e.models.identifier import Identifier
@@ -18,7 +18,7 @@ class Class(BaseModel):
     _method_ids: Optional[list[Identifier]] = None
 
     @property
-    def file_path(self) -> str:
+    def file_path(self) -> Path:
         return self.file.file_path
 
     @property

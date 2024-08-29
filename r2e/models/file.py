@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from pathlib import Path
 
 from r2e.models.module import Module
 from r2e.models.repo import Repo
@@ -11,11 +12,11 @@ class File(BaseModel):
     _file_content: Optional[str] = None
 
     @property
-    def file_path(self) -> str:
+    def file_path(self) -> Path:
         return self.file_module.local_path
 
     @property
-    def relative_file_path(self) -> str:
+    def relative_file_path(self) -> Path:
         return self.file_module.relative_module_path
 
     @property
@@ -45,12 +46,12 @@ class File(BaseModel):
         return hash((self.file_path, self._repo_name, self.file_content))
 
     @classmethod
-    def from_file_path(cls, file_path: str, repo: Repo | None) -> "File":
+    def from_file_path(cls, file_path: str | Path, repo: Repo | None) -> "File":
         file_module = Module.from_file_path(file_path, repo=repo)
         return cls(file_module=file_module)
 
     def __str__(self) -> str:
-        return self.file_path.split(str(REPOS_DIR))[1][1:]
+        return str(self.file_path.relative_to(REPOS_DIR))
 
     def __repr__(self) -> str:
         return f"File({self.file_path})"

@@ -1,6 +1,7 @@
 """Python AST builder and explorer."""
 
 import ast
+from pathlib import Path
 from typing import Optional
 
 from r2e.pat.ast.augmenter import add_parent_info
@@ -21,7 +22,7 @@ def build_ast(code: str, add_parents: bool = True) -> ast.Module:
     return astree
 
 
-def build_ast_file(file_path: str, add_parents: bool = True) -> ast.Module:
+def build_ast_file(file_path: Path, add_parents: bool = True) -> ast.Module:
     """Build an AST from a file.
 
     Args:

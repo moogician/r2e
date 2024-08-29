@@ -2,6 +2,7 @@ import ast
 import os
 import shutil
 import importlib
+from pathlib import Path
 
 from r2e.pat.modules.explorer import ModuleExplorer
 from r2e.pat.imports.resolver import ImportResolver
@@ -71,9 +72,9 @@ class ImportTransformer:
             file.write(source_code)
 
     @staticmethod
-    def transform_repo(repo_path: str) -> str:
+    def transform_repo(repo_path: Path) -> Path:
         """Applies various transformations to all imports in a Python repository."""
-        temp_path = repo_path + "_temp"
+        temp_path = repo_path.parent / f"{repo_path.name}_temp"
         if os.path.exists(temp_path):
             shutil.rmtree(temp_path)
         temp_path = shutil.copytree(repo_path, temp_path)

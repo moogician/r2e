@@ -11,6 +11,7 @@ In 43rd International Conference on Software Engineering, ICSE '21, 25–28 May 
 import os
 import sys
 import shutil
+from pathlib import Path
 
 try:
     import PyCG as pycg
@@ -28,7 +29,7 @@ from r2e.pat.imports.transformer import ImportTransformer
 
 class CallGraphGenerator:
     @staticmethod
-    def construct_call_graph(repo_path: str, max_iter: int = -1) -> dict:
+    def construct_call_graph(repo_path: Path, max_iter: int = -1) -> dict:
         try:
             repo_path = ImportTransformer.transform_repo(repo_path)
 
