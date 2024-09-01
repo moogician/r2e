@@ -20,6 +20,8 @@ class Module(BaseModel):
 
     @property
     def local_path(self) -> str:
+        # BUG: some of the files have '.' in file name
+        # consider filtering beforehand or rewrite this part
         path = self.module_id.identifier.replace(".", "/")
         if self.module_type == ModuleTypeEnum.PACKAGE:
             return f"{self.repo.repo_path}/{path}"
